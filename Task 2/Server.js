@@ -21,6 +21,13 @@ app.post('/register',(req,res)=>{
     if(!age || isNaN(age) || age < 18 || age > 100){
         errors.push('Age must be a number between 18 and 100.');
     }
+    if(!gender){
+        errors.push('Please select a gender.');
+    }
+
+    if(!city){
+        errors.push('Please select a city.');
+    }
     if(!password || password.length < 6){
         errors.push('Password must be at least 6 characters long.');
     }
@@ -39,7 +46,7 @@ app.post('/register',(req,res)=>{
             city: city
         };
         users.push(user);
-        res.render('response', { name });
+        res.render('response', user);
         console.log(users);
     }
     
