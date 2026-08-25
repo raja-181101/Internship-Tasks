@@ -2,35 +2,154 @@
 <html>
     <head>
         <title>Registration Form</title>
+        <style>
+            body{
+                margin: 40px;
+            }
+            .form_container{
+                width: 400px;
+                margin: auto;
+                
+            }
+            input, select{
+                width: 100%;
+                padding: 8px;
+                margin-top: 5px;
+                margin-bottom: 15px;
+                box-sizing: border-box;
+            }
+            .gender{
+                display: flex;
+                flex-direction: row;
+                gap: 20px;
+                align-items: center;
+            }
+            .gender label{
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+            .gender input[type="radio"]{
+               width: auto;
+               margin: 0;
+            }
+            button{
+                margin:auto;
+                padding:10px;
+                cursor: pointer;
+            }
+            
+        </style>
     </head>
     <body>
-        <h1>Registration Form</h1>
-        <form action="/register" method="POST">
-            <label>Name:</label>
-            <input type="text" id="name" name="name" required><br><br>
 
+
+        <div class="form_container">
+            <h1>Registration Form</h1>
+            <%if(errors && errors.length > 0 ){ %>
+            <div class = "error_field">
+                <%errors.forEach(error=>{%>
+                <p style="color: red;"><%=error%></p>
+                <%});%>
+            </div>
+            <%}%>
+            <form action="/register" method="POST" onsubmit="return checkdForm()">
+            <label>Name:</label>
+            <input type="text" id="name" name="name" value ="<%=formData?.name || ''%>" oninput="verifyName()" required><br><br>
+            <p id="nameError" style="color: red;"></p>
             <label>Email:</label>
-            <input type="email" id="email" name="email" required><br><br>
+            <input type="email" id="email" name="email" value ="<%=formData?.email || ''%>" required><br><br>
 
             <label>Age:</label>
-            <input type="number" id="age" name="age" required><br><br>
+            <input type="number" id="age" name="age" value ="<%=formData?.age || ''%>" required><br><br>
 
             <label>Gender:</label>
-            <input type="radio" id="male" name="gender" value="male">Male
-            <input type="radio" id="female" name="gender" value="female">Female<br><br>
+            <div class="gender">
+                <label>
+                <input type="radio" id="male" name="gender" value="male" <%= (formData?.gender === 'male') ? 'checked' : '' %>>Male
+                </label>
+                <label>
+                <input type="radio" id="female" name="gender" value="female" <%= (formData?.gender === 'female') ? 'checked' : '' %>>Female
+                </label>
+            </div>
 
             <label>City:</label>
             <select id="city" name="city" required>
                 <option value="">Select City</option>
-                <option value="New York">Hyderabad</option>
-                <option value="Los Angeles">Bangalore</option>
-                <option value="Chicago">Chennai</option>
-                <option value="Australia">Coimbatore</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Coimbatore">Coimbatore</option>
             </select><br><br>
 
             <label>Password:</label>
             <input type="password" id="password" name="password" required><br><br>
 
-            <button type="submit">Register</button> 
+            <label>Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
+
+            <button type="submit" style="background-color: green; color: white;">Register</button> 
+        </form>
+
+        </div>
+
+        <script>
+
+            function verifyName() {
+                const nameInput = document.getElementById('name');
+                const error = document.getElementById('nameError');
+                const nameValue = nameInput.value.trim();
+                const nameRegex = /^[A-Za-z\s]+$/;
+
+                if (!nameRegex.test(nameValue) && nameValue.length>2) {
+                    error.innerHTML = 'Name should contain only letters and spaces.';
+                } else {
+                    error.innerHTML = ''; 
+                }
+            }
+
+
+            function checkdForm() {
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const email = document.getElementById('email').value;
+                const age = document.getElementById('age').value;
+                const city = document.getElementById('city').value;
+                const gender = document.querySelector('input[name="gender"]:checked');
+                
+                if(!email || !/^\S+@\S+\.\S+$/.test(email)){
+                   alert('Invalid email format!');
+                   return false;
+                }
+
+                if(!age || isNaN(age) || age < 18 || age > 100){
+                    alert('Age must be a number between 18 and 100!');
+                    return false;
+                }
+
+                if(!gender){
+                    alert('Please select a gender!');
+                    return false;
+                }
+
+                if(!city){
+                    alert('Please select a city!');
+                    return false;
+                }
+
+                if(!password || password.length < 6){
+                    alert('Password must be at least 6 characters long!');
+                    return false;
+                }
+
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match!');
+                    return false;
+                }
+                return true;
+            }
+        </script>
+        
+        
     </body>
 </html>
