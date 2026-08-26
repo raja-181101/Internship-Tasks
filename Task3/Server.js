@@ -5,6 +5,7 @@ const users = [];
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended: true}));
+app.use(express.static("css"));
 app.get('/',(req,res)=>{
     res.render('index');
 });
