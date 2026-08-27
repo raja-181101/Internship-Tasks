@@ -41,7 +41,7 @@ app.post('/register',(req,res)=>{
         errors.push('Passwords do not match.');
     }
     if(errors.length > 0){
-        res.render('index', { errors, formData: req.body });
+        res.render('register', { errors, formData: req.body });
     } else {
         const user ={
             id: users.length + 1,
@@ -52,7 +52,7 @@ app.post('/register',(req,res)=>{
             city: city
         };
         users.push(user);
-        res.render('response', user);
+        res.render('response', {user});
         console.log(users);
     }
     
