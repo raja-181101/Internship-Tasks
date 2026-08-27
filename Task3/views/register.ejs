@@ -37,7 +37,7 @@
                                 </div>
                             <%}%>
 
-                            <form action="/register" method="post" onsubmit="return checkedForm()">
+                            <form action="/register" method="post" onsubmit="return checkedForm()" novalidate>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="name">Name</label>
@@ -48,14 +48,14 @@
 
                                 <div class="mb-3">
                                     <label class="form-label" for="email">Email</label>
-                                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" value="<%=formData?.email || ''%>">
-                                    
+                                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" value="<%=formData?.email || ''%>" oninput="verifyEmail()">
+                                    <p id="emailError" class="text-danger"></p>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="age">Age</label>
-                                    <input type="number" id="age" name="age" class="form-control" placeholder="Enter your age" value="<%=formData?.age || ''%>">
-                                    
+                                    <input type="number" id="age" name="age" class="form-control" placeholder="Enter your age" value="<%=formData?.age || ''%>" oninput="verifyAge()">
+                                    <p id="ageError" class="text-danger"></p>
                                 </div>
 
                                 <div class="mb-4">
@@ -70,6 +70,7 @@
                                         </label>
 
                                     </div>
+                                    <p id="genderError" class="text-danger"></p>
                                 </div>
 
                                 <div class="mb-3">
@@ -86,16 +87,19 @@
                                         <option value="Nodia" <%= formData?.city ==='Nodia'? 'selected': ''%>>Nodia</option>
                                         <option value="Delhi" <%= formData?.city ==='Delhi'? 'selected': ''%>>Delhi</option>
                                     </select>
+                                    <p id="cityError" class="text-danger"></p>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label" for="password">Password</label>
-                                        <input type="password" placeholder="Enter your password" id="password" name="password" class="form-control">
+                                        <input type="password" placeholder="Enter your password" id="password" name="password" class="form-control" oninput="verifyPassword()">
+                                        <p id="passwordError" class="text-danger"></p>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label" for="confirPassword">Confirm Password</label>
                                         <input type="password" placeholder="Enter your password" id="confirmPassword" name="confirmPassword" class="form-control">
+                                        <p id="confirmpasswordError" class="text-danger"></p>
                                     </div>
                                 </div>
 
@@ -131,7 +135,44 @@
                     error.innerHTML = ''; 
                 }
             }
+            function verifyEmail(){
+                const email = document.getElementById('email');
+                const emailValue = email.value;
+                const emailRegax =  /^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/;
+                const error = document.getElementById('emailError');
 
+                if(!email || !emailRegax.test(emailValue)){
+                    error.innerHTML = "Enter Valid Email.";
+                }else{
+                    error.innerHTML = '';
+                }
+
+            }
+            function verifyAge(){
+                const age = document.getElementById('age');
+                const error = document.getElementById('ageError');
+                const ageValue = age.value;
+
+
+                if(!age || isNaN(ageValue) || ageValue < 18 || ageValue > 100){
+                    error.innerHTML = "Enter age between 18 - 100 only!";
+                }else{
+                    error.innerHTML = '';
+                }
+
+            }
+            function verifyPassword(){
+                const password = document.getElementById('password');
+                const error = document.getElementById('passwordError');
+                const passwordValue = password.value;
+
+                if(!password || passwordValue.length < 6){
+                    error.innerHTML = "Password must be more then 6 Characters!";
+                }else{
+                    error.innerHTML = '';
+                }
+
+            }
 
             function checkedForm() {
                 const password = document.getElementById('password').value;
@@ -140,9 +181,10 @@
                 const age = document.getElementById('age').value;
                 const city = document.getElementById('city').value;
                 const gender = document.querySelector('input[name="gender"]:checked');
+                const emailRegax = /^\S+@\S+\.\S+$/;
 
                 
-                if(!email || !/^\S+@\S+\.\S+$/.test(email)){
+                if(!email || !emailRegax.test(email)){
                    alert('Invalid email format!');
                    return false;
                 }
