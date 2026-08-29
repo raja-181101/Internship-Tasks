@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Registration Form</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body class="register-page">
+      <main id="app-content">
+
+        <nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+                <div class="container">
+                    <a class="navbar-brand fw-bold" href="/">Task 4</a>
+                    <div class="ms-auto">
+                        <a class="nav-link text-light" href="/">Home</a>
+                    </div>
+                </div>
+        </nav>
+
+        <section class="register-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7 col-md-9">
+                        <div class="register-card">
+                            <div class="register-heading text-center">
+                                <span class="section-label">REGISTRATION</span>
+                                <h1>Create Your Account</h1>
+                                <p>Enter your information. The submitted data will be validated by both the browser and the Express server.</p>
+
+                            </div>
+
+                            <%if(errors && errors.length>0){%>
+                                <div class="alert alert-danger">
+                                    <%errors.forEach(error=>{%>
+                                        <p class="mb-1">
+                                            <%=error%>
+                                        </p>
+                                        <%})%>
+                                </div>
+                            <%}%>
+
+                            <form action="/register" method="post" id="registerForm" novalidate autocomplete="off">
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="name">Name</label>
+                                    <input type="text" id="name" name="name" placeholder="Enter Your Name" class="form-control" value="<%=formData?.name || ''%>" oninput="verifyName()">
+                                    <p id="nameError" class="text-danger"></p>
+
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" value="<%=formData?.email || ''%>" oninput="verifyEmail()">
+                                    <p id="emailError" class="text-danger"></p>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="age">Age</label>
+                                    <input type="number" id="age" name="age" class="form-control" placeholder="Enter your age" value="<%=formData?.age || ''%>" oninput="verifyAge()">
+                                    <p id="ageError" class="text-danger"></p>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label d-block">Gender</label>
+                                    <div class="gender-options">
+                                        <label class="gender-option">
+                                            <input type="radio" name="gender" value="male" <%= formData?.gender === 'male' ? 'checked': ''%>>Male
+                                        </label>
+
+                                        <label class="gender-option">
+                                            <input type="radio" name="gender" value="female" <%= formData?.gender === 'female' ? 'checked' : ''%>>Female
+                                        </label>
+
+                                    </div>
+                                    <p id="genderError" class="text-danger"></p>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="city">City</label>
+                                    <select id="city" name="city" class="form-select">
+                                        <option value="">Select City</option>
+                                        <option value="Hyderabad" <%= formData?.city === 'Hyderabad'? 'selected': ''%>>Hyderabad</option>
+                                        <option value="Bangalore" <%= formData?.city ==='Bangalore'? 'selected': ''%>>Bangalore</option>
+                                        <option value="Chennai" <%= formData?.city ==='Chennai'? 'selected': ''%>>Chennai</option>
+                                        <option value="Coiambatore" <%= formData?.city ==='Coiambatore'? 'selected': ''%>>Coiambatore</option>
+                                        <option value="Kochi" <%= formData?.city ==='Kochi'? 'selected': ''%>>Kochi</option>
+                                        <option value="Mysuru" <%= formData?.city ==='Mysuru'? 'selected': ''%>>Mysuru</option>
+                                        <option value="Vishakapatanam" <%= formData?.city ==='Vishakapatanam'? 'selected': ''%>>Vishakapatanam</option>
+                                        <option value="Nodia" <%= formData?.city ==='Nodia'? 'selected': ''%>>Nodia</option>
+                                        <option value="Delhi" <%= formData?.city ==='Delhi'? 'selected': ''%>>Delhi</option>
+                                    </select>
+                                    <p id="cityError" class="text-danger"></p>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="password">Password</label>
+                                        <div class="password-box">
+                                            <input type="password" placeholder="Enter your password" id="password" name="password" class="form-control" oninput="checkPasswordStrength()" autocomplete="new-password">
+                                            <i class="bi bi-eye eye-icon" onclick="togglePassword('password',this)"></i>
+
+                                        </div>
+                                        <p id="passwordStrength" class="strength-text"></p>
+                                        <div class="password-rules">
+                                            <p id="lengthRule">✗ Minimum 8 characters</p>
+                                            <p id="upperRule">✗ At least one uppercase letter</p>
+                                            <p id="lowerRule">✗ At least one lowercase letter</p>
+                                            <p id="numberRule">✗ At least one number</p>
+                                            <p id="specialRule">✗ At least one special character</p>
+                                        </div>
+                                        <p id="passwordError" class="text-danger"></p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="confirmPassword">Confirm Password</label>
+                                        <div class="password-box">
+                                            <input type="password" placeholder="Enter your password" id="confirmPassword" name="confirmPassword" class="form-control" oninput="checkPasswordMatch()">
+                                            <i class="bi bi-eye eye-icon" onclick="togglePassword('confirmPassword',this)"></i>
+                                        </div>
+                                        <p id="passwordMatch" class="strength-text"></p>
+                                        <p id="confirmpasswordError" class="text-danger"></p>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary custom-button w-100">
+                                    Register
+                                </button>
+
+                                </form>
+
+                                <div class="mt-4 text-center">
+                                    <a class="back-home-link" href="/"> ⬅ Back to Home</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        
+
+      </main>
+
+        <script id="page-script">
+
+        function checkPasswordStrength(){
+            const password = document.getElementById("password").value;
+            const strengthText = document.getElementById("passwordStrength");
+
+            let strength = 0;
+            if(password.length >= 8){
+                strength++;
+                updateRule("lengthRule",true,"Minimum 8 characters");
+            }else{
+                updateRule("lengthRule",false,"Minimun 8 characters")
+            }
+            if (/[A-Z]/.test(password)) {
+                strength++;
+                updateRule("upperRule",true,"At least one uppercase letter");
+            } else {
+                updateRule("upperRule",false,"At least one uppercase letter");
+            }
+            if (/[a-z]/.test(password)) {
+                strength++;
+                updateRule("lowerRule",true,"At least one lowercase letter");
+            } else {
+                updateRule("lowerRule",false,"At least one lowercase letter");
+            }
+            if (/[0-9]/.test(password)) {
+                strength++;
+                updateRule("numberRule",true,"At least one Number");
+            } else {
+                updateRule("numberRule",false,"At least one Number");
+            }
+            if (/[^A-Za-z0-9]/.test(password)) {
+                strength++;
+                updateRule("specialRule",true,"At least one special character");
+            } else {
+                updateRule("specialRule",false,"At least one special character");
+            }
+            if(password.length === 0){
+                strengthText.innerHTML = ""
+                strengthText.className = "strength-text"
+            }else if(strength<=2){
+                strengthText.innerHTML = "Weak Password"
+                strengthText.className = "strength-text weak"
+            }else if(strength<=4){
+                strengthText.innerHTML = "Medium Password"
+                strengthText.className = "strength-text medium"
+            }else{
+                strengthText.innerHTML = "Strong Password"
+                strengthText.className = "strength-text strong"
+            }
+            checkPasswordMatch();
+            
+        }
+
+        function checkPasswordMatch() {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const message = document.getElementById("passwordMatch");
+            if (confirmPassword.length === 0) {
+                message.innerText = "";
+            return;
+            }
+            if (password === confirmPassword) {
+                message.innerText = "✓ Passwords match";
+                message.className = "strength-text strong";
+            } else {
+                message.innerText = "✗ Passwords do not match";
+                message.className = "strength-text weak";
+            }
+        }
+
+        function updateRule(id,valid,text){
+            const rule = document.getElementById(id);
+            if(valid){
+                rule.innerText = "✓ " + text;
+                rule.className = "valid-rule";
+            }else {
+                rule.innerText ="✗ " + text;
+                rule.className ="invalid-rule";
+            }
+        }
+
+        function verifyName() {
+            const nameInput = document.getElementById('name');
+            const error = document.getElementById('nameError');
+            const nameValue = nameInput.value.trim();
+            const nameRegex = /^[A-Za-z\s]+$/;
+            if (!nameRegex.test(nameValue) || nameValue.length<3) {
+                error.innerHTML = 'Name should contain only letters and spaces.';
+            } else {
+                error.innerHTML = ''; 
+            }
+        }
+        
+        function verifyEmail(){
+            const email = document.getElementById('email');
+            const emailValue = email.value;
+            const emailRegax =  /^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/;
+            const error = document.getElementById('emailError');
+            if(!emailValue || !emailRegax.test(emailValue)){
+                error.innerHTML = "Enter Valid Email.";
+            }else{
+                error.innerHTML = '';
+            }
+
+        }
+
+        function verifyAge(){
+            const age = document.getElementById('age');
+            const error = document.getElementById('ageError');
+            const ageValue = age.value;
+            if(!ageValue || isNaN(ageValue) || ageValue < 18 || ageValue > 100){
+                error.innerHTML = "Enter age between 18 - 100 only!";
+            }else{
+                error.innerHTML = '';
+            }
+
+        }
+
+        function verifyPassword(){
+            const password = document.getElementById('password');
+            const error = document.getElementById('passwordError');
+            const passwordValue = password.value;
+            if(!passwordValue || passwordValue.length < 6){
+                error.innerHTML = "Password must be more then 6 Characters!";
+            }else{
+                error.innerHTML = '';
+            }
+
+        }
+
+        function togglePassword(inputId,icon){
+            const input = document.getElementById(inputId);
+            if(input.type === "password"){
+                input.type = "text";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            }else{
+                input.type = "password";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            }
+        }
+
+        function checkedForm() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const email = document.getElementById('email').value;
+            const age = document.getElementById('age').value;
+            const city = document.getElementById('city').value;
+            const gender = document.querySelector('input[name="gender"]:checked');
+            const emailRegax = /^\S+@\S+\.\S+$/;
+            
+            if(!email || !emailRegax.test(email)){
+               alert('Invalid email format!');
+               return false;
+            }
+            if(!age || isNaN(age) || age < 18 || age > 100){
+                alert('Age must be a number between 18 and 100!');
+                return false;
+            }
+            if(!gender){
+                alert('Please select a gender!');
+                return false;
+            }
+            if(!city){
+                alert('Please select a city!');
+                return false;
+            }
+            if(!password || password.length < 6){
+                alert('Password must be at least 6 characters long!');
+                return false;
+            }
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return false;
+            }
+            return true;
+        }
+
+        </script>
+        <script src="/router.js"></script>
+    </body>
+    
+</html>
