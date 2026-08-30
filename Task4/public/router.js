@@ -1,19 +1,19 @@
 (function () {
   const CONTENT_ID = "app-content";
   const PAGE_SCRIPT_ID = "page-script";
-
+  let currentPath = window.location.pathname;
   function applyDocument(doc) {
     const newContent = doc.getElementById(CONTENT_ID);
     const currentContent = document.getElementById(CONTENT_ID);
-
     if (!newContent || !currentContent) {
       return false;
     }
+
     currentContent.replaceWith(newContent);
 
     const newTitle = doc.querySelector("title");
     if (newTitle) document.title = newTitle.textContent;
-
+    document.body.className = doc.body.className;
     const oldScript = document.getElementById(PAGE_SCRIPT_ID);
     if (oldScript) oldScript.remove();
 
@@ -44,6 +44,7 @@
       }
 
       if (push) history.pushState({ url }, "", url);
+      currentPath = new URL(url, window.location.origin).pathname;
     } catch (err) {
       console.error("Client-side navigation failed, falling back to full reload:", err);
       window.location.href = url;
@@ -58,12 +59,24 @@
     if (!href.startsWith("/")) return false;
     return true;
   }
- 
+
   function onLinkClick(e) {
     const link = e.currentTarget;
     if (!shouldIntercept(link)) return;
     e.preventDefault();
     navigate(link.getAttribute("href"));
+  }
+  function onHashLinkClick(e) {
+    const link = e.currentTarget;
+    const href = link.getAttribute("href");
+    const id = href.slice(1);
+    const target = id ? document.getElementById(id) : null;
+
+    if (!target) return;
+
+    e.preventDefault();
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    history.replaceState(history.state, "", href);
   }
 
   async function onRegisterSubmit(e) {
@@ -86,8 +99,9 @@
         form.submit();
         return;
       }
+
       const finalUrl = res.redirected ? new URL(res.url).pathname : "/register";
-      history.pushState({ url: finalUrl }, "", finalUrl);
+      history.replaceState({ url: finalUrl }, "", finalUrl);
     } catch (err) {
       console.error("AJAX form submit failed, falling back to normal submit:", err);
       form.submit();
@@ -96,8 +110,15 @@
 
   function bindPage() {
     document.querySelectorAll("#app-content a[href]").forEach((link) => {
+      const href = link.getAttribute("href");
       link.removeEventListener("click", onLinkClick);
-      link.addEventListener("click", onLinkClick);
+      link.removeEventListener("click", onHashLinkClick);
+
+      if (href && href.startsWith("#")) {
+        link.addEventListener("click", onHashLinkClick);
+      } else {
+        link.addEventListener("click", onLinkClick);
+      }
     });
 
     const registerForm = document.getElementById("registerForm");
@@ -108,7 +129,12 @@
   }
 
   window.addEventListener("popstate", () => {
-    navigate(window.location.pathname, { push: false });
+    const newPath = window.location.pathname;
+    if (newPath === currentPath) {
+      return;
+    }
+    currentPath = newPath;
+    navigate(newPath, { push: false });
   });
 
   document.addEventListener("DOMContentLoaded", bindPage);
