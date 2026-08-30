@@ -504,6 +504,7 @@ body{
             .response-card{
                 width: 100%;
                 max-width: 650px;
+                align-items: center;
                 position: relative;
                 z-index: 1;
                 padding: 45px;
@@ -529,7 +530,9 @@ body{
             }
             .success-label{
                 display: block;
+                width: 100%;
                 text-align: center;
+                margin: 20px 0 15px;
                 color: #2dd4bf;
                 font-size: 13px;
                 font-weight: bold;
