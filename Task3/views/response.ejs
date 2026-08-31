@@ -177,23 +177,23 @@
                 <h3 class="details-title">Your Details</h3>
                 <div class="detail-row">
                     <span class="detail-label">Name</span>
-                    <span class="detail-value"><%= user.name%></span>
+                    <span class="detail-value"><%= User.name%></span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Email</span>
-                    <span class="detail-value"><%= user.email%></span>
+                    <span class="detail-value"><%= User.email%></span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Age</span>
-                    <span class="detail-value"><%= user.age%></span>
+                    <span class="detail-value"><%= User.age%></span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Gender</span>
-                    <span class="detail-value"><%= user.gender%></span>
+                    <span class="detail-value"><%= User.gender%></span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">City</span>
-                    <span class="detail-value"><%= user.city%></span>
+                    <span class="detail-value"><%= User.city%></span>
                 </div>
                 <a href="/" class="home-button">🛖 Back to Home</a>
             </div>
@@ -206,7 +206,7 @@
                 <div class="col-lg-7">
                     <div class="response-content">
                         <h1>Registration Successful</h1>
-                        <h2>Thank You,<span> <%= user.name %>!</span></h2>
+                        <h2>Thank You,<span> <%= User.name %>!</span></h2>
                         <p>Your registration has been successfully processed and validated by the server.</p>
                         <a href = "/" class = "btn btn-primary custom-button">Go To Home</a>
                     </div>
@@ -218,19 +218,19 @@
                             <div class = "response-list">
                                 <div class="response-item">
                                     <span>01</span>
-                                    <p><strong>Email:</strong> <%= user.email %></p>
+                                    <p><strong>Email:</strong> <%= User.email %></p>
                                 </div>
                                 <div class="response-item">
                                     <span>02</span>
-                                    <p><strong>Age:</strong> <%= user.age %></p>
+                                    <p><strong>Age:</strong> <%= User.age %></p>
                                 </div>
                                 <div class="response-item">
                                     <span>03</span>
-                                    <p><strong>Gender:</strong> <%= user.gender %></p>
+                                    <p><strong>Gender:</strong> <%= User.gender %></p>
                                 </div>
                                 <div class="response-item">
                                     <span>04</span>
-                                    <p><strong>City:</strong> <%= user.city %></p>
+                                    <p><strong>City:</strong> <%= User.city %></p>
                                 </div>
                             </div>
                         </div>
