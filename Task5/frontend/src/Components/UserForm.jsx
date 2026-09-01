@@ -69,6 +69,16 @@ function UserForm({
                         />
                         Female
                     </label>
+                    <label className="gender-option">
+                        <input
+                            type="radio"
+                            name="gender"
+                            value="Other"
+                            checked={formData.gender === "Other"}
+                            onChange={handleChange}
+                        />
+                        Other
+                    </label>
                 </div>
             </div>
 

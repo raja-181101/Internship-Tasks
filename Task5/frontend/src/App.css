@@ -433,8 +433,8 @@ body {
 .gender-options {
   display: flex;
   gap: 20px;
-  padding: 14px;
-  min-height: 65px;
+  padding: 10px;
+  min-height: 60px;
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 12px;
@@ -566,6 +566,202 @@ body {
 .register-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+}
+.users-page {
+  min-height: calc(100vh - 70px);
+  padding: 90px 20px;
+  color: white;
+  background: radial-gradient(circle at 15% 25%, rgba(139, 92, 246, 0.45), transparent 35%),
+              radial-gradient(circle at 85% 20%, rgba(37, 99, 235, 0.45), transparent 35%),
+              linear-gradient(135deg, #101a58, #17269c, #142bcb);
+}
+
+.users-heading {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.users-heading h1 {
+  margin: 10px 0 12px;
+  color: white;
+  font-size: 2.8rem;
+  font-weight: 700;
+}
+
+.users-heading p {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.users-grid {
+  display: grid;
+  grid-template-columns:repeat(auto-fit, 340px);
+  gap: 25px;
+  justify-content: center;
+  align-items: start;
+  max-width: 1070px;
+  margin: 0 auto;
+}
+
+.user-card {
+  width: 340px;
+  min-height: 230px;
+  position: relative;
+  overflow: hidden;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.13);
+  box-shadow: 0 28px 55px rgba(0, 0, 0, 0.3);
+}
+
+.user-main {
+  text-align: center;
+  transition: transform 0.35s ease;
+}
+
+.user-card:hover .user-main {
+  transform: translateY(-8px);
+}
+
+.user-avatar {
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+}
+
+.user-main h2 {
+  margin-bottom: 8px;
+  color: white;
+  font-size: 1.4rem;
+}
+
+.user-email {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.95rem;
+}
+
+.user-extra {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-top: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease;
+}
+
+.user-card:hover .user-extra {
+  max-height: 240px;
+  opacity: 1;
+  margin-top: 20px;
+}
+
+.user-detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.user-detail span {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.user-detail strong {
+  color: white;
+}
+
+.user-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.edit-button,
+.delete-button {
+  flex: 1;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 9px;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.edit-button {
+  color: white;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+}
+
+
+.delete-button {
+  color: white;
+  background: linear-gradient(90deg, #dc2626, #ef4444);
+}
+
+.edit-button:hover,
+.delete-button:hover {
+  color: white;
+  transform: translateY(-2px);
+}
+
+.users-status,
+.no-users {
+  text-align: center;
+}
+
+.no-users {
+  max-width: 500px;
+  margin: auto;
+  padding: 45px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.no-users h3 {
+  color: white;
+  margin-bottom: 10px;
+}
+
+.no-users p {
+  margin-bottom: 25px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 600px) {
+  .users-page {
+    padding: 70px 15px;
+  }
+
+  .users-heading h1 {
+    font-size: 2.1rem;
+  }
+
+  .user-card {
+    padding: 25px;
+  }
+
 }
 
 @media (max-width: 600px) {
