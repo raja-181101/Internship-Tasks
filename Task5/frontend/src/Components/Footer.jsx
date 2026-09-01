@@ -6,7 +6,7 @@ function Footer() {
                 <p>
                     React + Spring Boot REST API
                 </p>
-                <a href="YOUR_GITHUB_LINK" target="_blank" rel="noreferrer" className="github-link">
+                <a href="https://github.com/raja-181101" target="_blank" rel="noreferrer" className="github-link">
                     GitHub Repository
                 </a>
                 <p className="copyright">

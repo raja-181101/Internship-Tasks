@@ -4,11 +4,13 @@ import User from "./Pages/User.jsx";
 import Register from "./Pages/Register.jsx";
 import EditUser from "./Pages/EditUser.jsx";
 import Navbar from "./Components/Navbar.jsx";
+import ScrollToTop from "./Components/ScrollToTop.jsx";
 import "./App.css"
 
 function App(){
   return (
       <BrowserRouter>
+          <ScrollToTop />
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />

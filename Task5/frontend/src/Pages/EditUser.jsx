@@ -12,6 +12,9 @@ function EditUser(){
         gender:"",
         city:""
     });
+    const [loading,setLoading]= useState(true);
+    const [error, setError] = useState("");
+
 
     useEffect(() =>{
         fetch(`http://localhost:8081/api/users/${id}`)
@@ -22,8 +25,11 @@ function EditUser(){
                 return response.json();
             }).then(data => {
                 setFormData(data);
+                setLoading(false);
         }).catch(error=>{
             console.error(error);
+            setError("Unable to Load user Details");
+            setLoading(false);
         });
     },[id]);
 
@@ -52,18 +58,54 @@ function EditUser(){
             return response.json();
         }).then(data=>{
             console.log("User Updated",data)
-            navigate("/user");
+            navigate(-1);
         }).catch(error=>{
             console.error("error creating user",error);
         });
     }
+    if (loading){
+        return (
+            <section className="edit-page">
+                <div className="edit-status">
+                    Loading user details...
+                </div>
+            </section>
+        );
+    }
+    if (error) {
+        return (
+            <section className="edit-page">
+                <div className="edit-status">
+                    {error}
+                </div>
+            </section>
+        );
+    }
 
     return(
-        <UserForm formData={formData}
-                  handleChange={handleChange}
-                  handleSubmit={handleSubmit}
-                  buttonText={"Update"}
-        />
+        <section className="edit-page">
+            <div className="edit-container">
+                <div className="edit-card">
+                    <div className="edit-heading">
+                        <span className="section-label">UPDATE USER</span>
+                        <h1>Edit User Details</h1>
+                        <p>Update the information below. Changes will be sent to the Spring Boot REST API.</p>
+                    </div>
+                    <UserForm
+                        formData={formData}
+                        handleChange={handleChange}
+                        handleSubmit={handleSubmit}
+                        buttonText="Update User"
+                    />
+                    <button
+                        type="button"
+                        className="cancel-edit-button"
+                        onClick={() => navigate(-1)}>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </section>
     );
 }
 export default EditUser;

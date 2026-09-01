@@ -55,6 +55,11 @@ function User(){
             </div>
         );
     }
+    const columns = [[], [], []];
+
+    users.forEach((user, index) => {
+        columns[index % 3].push(user);
+    });
 
    return (
 
@@ -75,41 +80,44 @@ function User(){
                        <p>Register a User to see them here</p>
                        <Link to={"/register"} className={"custom-button"}>Register User</Link>
                    </div>
-               ):(<div className="users-grid">
-                   {users.map(user => (
-                       <div className="user-card" key={user.id}>
-                           <div className="user-main">
-                               <div className="user-avatar">
-                                   {user.name.charAt(0).toUpperCase()}
-                               </div>
-                               <h2>{user.name}</h2>
-                               <p className="user-email">{user.email}</p>
+               ):(<div className="users-columns">
+                       {columns.map((column, columnIndex) => (
+                           <div className="users-column" key={columnIndex}>
+                               {column.map((user) => (
+                                   <div className="user-card" key={user.id}>
+                                       <div className="user-main">
+                                           <div className="user-avatar">{user.name.charAt(0).toUpperCase()}
+                                           </div>
+                                           <h2>{user.name}</h2>
+                                           <p className="user-email">{user.email}</p>
+                                       </div>
+                                       <div className="user-extra">
+                                           <div className="user-detail">
+                                               <span>Age</span>
+                                               <strong>{user.age}</strong>
+                                           </div>
+                                           <div className="user-detail">
+                                               <span>Gender</span>
+                                               <strong>{user.gender}</strong>
+                                           </div>
+                                           <div className="user-detail">
+                                               <span>City</span>
+                                               <strong>{user.city}</strong>
+                                           </div>
+                                           <div className="user-actions">
+                                               <Link to={`/user/${user.id}/edit`} className="edit-button">
+                                                   Edit
+                                               </Link>
+                                               <button className="delete-button" onClick={() => deleteUser(user.id)}>
+                                                   Delete
+                                               </button>
+                                           </div>
+                                       </div>
+                                   </div>
+                               ))}
                            </div>
-                           <div className="user-extra">
-                               <div className="user-detail">
-                                   <span>Age</span>
-                                   <strong>{user.age}</strong>
-                               </div>
-                               <div className="user-detail">
-                                   <span>Gender</span>
-                                   <strong>{user.gender}</strong>
-                               </div>
-                               <div className="user-detail">
-                                   <span>City</span>
-                                   <strong>{user.city}</strong>
-                               </div>
-                               <div className="user-actions">
-                                   <Link to={`/user/${user.id}/edit`} className="edit-button">
-                                       Edit
-                                   </Link>
-                                   <button className="delete-button" onClick={() => deleteUser(user.id)}>
-                                       Delete
-                                   </button>
-                               </div>
-                           </div>
-                       </div>
-                   ))}
-               </div>
+                       ))}
+                   </div>
                )}
            </div>
        </section>

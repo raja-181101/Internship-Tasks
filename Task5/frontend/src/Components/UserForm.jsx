@@ -3,6 +3,7 @@ function UserForm({
                       handleChange,
                       handleSubmit,
                       buttonText,
+                      errors={},
                       showPasswordFields = false,
                       password,
                       setPassword,
@@ -21,6 +22,7 @@ function UserForm({
             <div className="form-group">
                 <label>Name <span className={"required-star"}>*</span></label>
                 <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter your name"/>
+                {errors.name && (<span className="error-message">{errors.name}</span>)}
             </div>
 
             <div className="form-group">
@@ -32,6 +34,7 @@ function UserForm({
                     onChange={handleChange}
                     placeholder="Enter your email"
                 />
+                {errors.email && (<span className="error-message">{errors.email}</span>)}
             </div>
 
             <div className="form-group">
@@ -43,6 +46,7 @@ function UserForm({
                     onChange={handleChange}
                     placeholder="Enter your age"
                 />
+                {errors.age && (<span className="error-message">{errors.age}</span>)}
             </div>
 
             <div className="form-group">
@@ -80,6 +84,7 @@ function UserForm({
                         Other
                     </label>
                 </div>
+                {errors.gender && (<span className="error-message">{errors.gender}</span>)}
             </div>
 
             <div className="form-group">
@@ -90,6 +95,8 @@ function UserForm({
                     <option value="Chennai">Chennai</option>
                     <option value="Bangalore">Bangalore</option>
                 </select>
+                {errors.city && (<span className="error-message">{errors.city}</span>)}
+
             </div>
 
             {showPasswordFields && (

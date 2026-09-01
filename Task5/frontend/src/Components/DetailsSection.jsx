@@ -50,7 +50,7 @@ function DetailsSection() {
                     />
                 </div>
                 <div className="text-center mt-5">
-                    <Link to="/users" className="custom-button">
+                    <Link to="/user" className="custom-button">
                         View Registered Users
                     </Link>
                 </div>
