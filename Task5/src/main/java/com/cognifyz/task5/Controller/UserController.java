@@ -3,6 +3,7 @@ package com.cognifyz.task5.Controller;
 
 import com.cognifyz.task5.Model.User;
 import com.cognifyz.task5.Services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,13 +34,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user){
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user){
         User createdUser = userService.createUser(user);
         return ResponseEntity.status(201).body(createdUser);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user){
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @Valid @RequestBody User user){
         User updatedUser = userService.updateUser(id,user);
         if (updatedUser == null){
             return ResponseEntity.notFound().build();

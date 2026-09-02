@@ -17,7 +17,7 @@ public class UserService {
 
     public User getUserById(Long id){
         return Users.stream()
-                .filter(User -> User.getId().equals(id))
+                .filter(user -> user.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
