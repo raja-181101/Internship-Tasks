@@ -64,8 +64,8 @@ function RegistrationSection() {
                     </div>
 
                     <div className="registration-action">
-                        <Link to="/register" className="custom-button">
-                            Go To Registration
+                        <Link to="/about" className="custom-button">
+                            About Project
                         </Link>
                     </div>
 

@@ -1,13 +1,18 @@
-package com.cognifyz.task5.Controller;
+package com.cognifyz.task6.Controller;
 
 
-import com.cognifyz.task5.Model.User;
-import com.cognifyz.task5.Services.UserService;
+import com.cognifyz.task6.DTO.RegistrationRequest;
+import com.cognifyz.task6.DTO.UpdateUserRequest;
+import com.cognifyz.task6.Model.User;
+import com.cognifyz.task6.Services.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -25,35 +30,74 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id){
+    public ResponseEntity<?> getUserById(@PathVariable Long id, Authentication authentication){
         User user = userService.getUserById(id);
         if(user==null){
             return ResponseEntity.notFound().build();
+        }
+        boolean isAdmin = authentication.getAuthorities()
+                .stream()
+                .anyMatch(authority->authority.getAuthority().equals("ROLE_ADMIN"));
+        Long loggedInUserId = (Long) authentication.getDetails();
+        boolean isOwner = user.getId().equals(loggedInUserId);
+        if (!isOwner && !isAdmin){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("message","You are not allowed to access this User"));
         }
         return ResponseEntity.ok(user);
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user){
+    public ResponseEntity<User> createUser(@Valid @RequestBody RegistrationRequest request){
+
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setAge(request.getAge());
+        user.setGender(request.getGender());
+        user.setCity(request.getCity());
+        user.setPassword(request.getPassword());
         User createdUser = userService.createUser(user);
         return ResponseEntity.status(201).body(createdUser);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @Valid @RequestBody User user){
-        User updatedUser = userService.updateUser(id,user);
-        if (updatedUser == null){
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest user, Authentication authentication){
+        User existingUser = userService.getUserById(id);
+
+        if (existingUser == null){
             return ResponseEntity.notFound().build();
         }
+        boolean isAdmin = authentication.getAuthorities()
+                .stream()
+                .anyMatch(authority->authority.getAuthority().equals("ROLE_ADMIN"));
+        Long loggedInUserId = (Long) authentication.getDetails();
+        boolean isOwner = existingUser.getId().equals(loggedInUserId);
+        if (!isOwner && !isAdmin){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("message","You are not allowed to access this User"));
+        }
+        User updatedUser = userService.updateUser(id,user);
+
         return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
-        boolean userDeleted = userService.deleteUser(id);
-        if (!userDeleted){
+    public ResponseEntity<?> deleteUser(@PathVariable Long id,Authentication authentication){
+        User existingUser = userService.getUserById(id);
+        if (existingUser == null){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.noContent().build();
+        boolean isAdmin = authentication.getAuthorities()
+                .stream()
+                .anyMatch(authority->authority.getAuthority().equals("ROLE_ADMIN"));
+        Long loggedInUserId = (Long) authentication.getDetails();
+        boolean isOwner = existingUser.getId().equals(loggedInUserId);
+        if (!isOwner && !isAdmin){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("message","You are not allowed to access this User"));
+        }
+        userService.deleteUser(id);
+        return ResponseEntity.ok(Map.of("message","user deleted successfully"));
     }
 }

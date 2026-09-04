@@ -27,7 +27,6 @@ function Register(){
     };
 
     const strength = Object.values(passwordRules).filter(Boolean).length;
-
     function handleChange(event){
         const {name,value} = event.target;
         setFormData(prev=>({
@@ -62,7 +61,7 @@ function Register(){
                 "Content-Type":"application/json"
             },
             body: JSON.stringify({
-                ...formData,age:Number(formData.age)
+                ...formData,age:Number(formData.age),password
             })
         }).then(response=>{
             if (!response.ok){
@@ -71,7 +70,7 @@ function Register(){
             return response.json();
         }).then(data=>{
             console.log("User Created",data)
-            navigate("/user",{replace:true});
+            navigate("/login",{replace:true});
         }).catch(error=>{
             console.error("error creating user",error);
         });

@@ -42,11 +42,11 @@ function DetailsSection() {
                         title="City"
                         text="Stores the selected city."
                     />
-
+                    
                     <DetailCard
-                        icon="ID"
-                        title="User ID"
-                        text="Generated automatically by the server."
+                        icon="🔐"
+                        title="Password"
+                        text="Passwords are validated and securely stored using BCrypt hashing."
                     />
                 </div>
                 <div className="text-center mt-5">

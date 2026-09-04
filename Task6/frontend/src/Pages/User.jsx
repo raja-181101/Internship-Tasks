@@ -1,41 +1,83 @@
 import {useEffect,useState} from "react";
 import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {logout} from "../utils/auth.js";
+import {authFetch} from "../utils/api.js";
 
 function User(){
    const[users,setUsers] = useState([]);
    const [loading,setLoading] = useState(true);
    const [error,setError]=useState("");
+   const role = localStorage.getItem("role");
+   const navigate = useNavigate();
 
    useEffect(()=>{
-       fetch("http://localhost:8081/api/users")
-           .then(response=>{
-               if (!response.ok){
-                   throw new Error("Http Error: "+response.status);
-               }
-               return response.json()})
-           .then(data=>{setUsers(data); setLoading(false)})
-           .catch(error => {console.error("error fetching data",error);
-               setError("Unable to Load Users");
-               setLoading(false)});
-   },[]);
+       const token = localStorage.getItem("token");
+       const role = localStorage.getItem("role");
+       const userId = localStorage.getItem("userId");
+       if (role === "ADMIN") {
+           authFetch("http://localhost:8081/api/users")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Unable to load users");
+                }
+                return response.json();
+            })
+            .then(data => {
+                setUsers(data);
+                setLoading(false)
+            }).catch(error=>{console.error("Unable to fetch data",error);
+                setError("Unable to fetch error");
+                setLoading(false)});
+
+    } else {
+           authFetch(`http://localhost:8081/api/users/${userId}`)
+               .then(response => {
+                if (!response.ok) {
+                    throw new Error("Unable to load user");
+                }
+                return response.json();
+            })
+            .then(data => {
+                setUsers([data]);
+                setLoading(false);
+            }).catch(error=>{console.error("Unable to fetch data",error);
+            setLoading(false);
+            setError("Unable to fetch data")})
+    }
+
+},[]);
+
+    const handleLogout = () => {
+        logout();
+        navigate("/", {replace: true});
+    };
 
    function deleteUser(id){
        const confirmed = window.confirm("Do you want to delete this user?");
-       if (!confirmed){
+       if (!confirmed) {
            return;
        }
-       fetch(`http://localhost:8081/api/users/${id}`,{
-           method:"DELETE"
-       }).then(response => {
-           if (!response.ok){
-               throw new Error("Failed to delete the user!");
-           }
-           setUsers(users.filter(
-               user => user.id !== id
-           ));
-       }).catch(error => {
-           console.error(error);
-       });
+       authFetch(`http://localhost:8081/api/users/${id}`, {method: "DELETE"})
+           .then(response => {
+               if (!response.ok) {
+                   throw new Error("Failed to delete the user!");}
+               if (role === "USER") {
+                   logout();
+                   navigate("/login", {replace: true});
+               } else {
+                   setUsers(prevUsers => prevUsers.filter(
+                           user => user.id !== id
+                       )
+                   );
+               }
+           })
+           .catch(error => {
+               console.error(error);
+           });
+   }
+   function moveToLogin(){
+       navigate("/login",{replace:true});
    }
     if (loading) {
         return (
@@ -49,9 +91,8 @@ function User(){
     if (error) {
         return (
             <div className="users-page">
-                <p className="users-status">
-                    {error}
-                </p>
+                <p className="users-status">{error}</p>
+                <button className="custom-button" onClick={moveToLogin}>Login</button>
             </div>
         );
     }
@@ -77,8 +118,8 @@ function User(){
                        <h3>
                            No Users Found
                        </h3>
-                       <p>Register a User to see them here</p>
-                       <Link to={"/register"} className={"custom-button"}>Register User</Link>
+                       <p>There are currently No Users available</p>
+
                    </div>
                ):(<div className="users-columns">
                        {columns.map((column, columnIndex) => (
@@ -104,6 +145,10 @@ function User(){
                                                <span>City</span>
                                                <strong>{user.city}</strong>
                                            </div>
+                                           <div className="user-detail">
+                                               <span>Role</span>
+                                               <strong>{user.role}</strong>
+                                           </div>
                                            <div className="user-actions">
                                                <Link to={`/user/${user.id}/edit`} className="edit-button">
                                                    Edit
@@ -111,6 +156,10 @@ function User(){
                                                <button className="delete-button" onClick={() => deleteUser(user.id)}>
                                                    Delete
                                                </button>
+                                               {role === "USER" && (<button className="edit-button" onClick={handleLogout}>
+                                                       Logout
+                                                   </button>
+                                               )}
                                            </div>
                                        </div>
                                    </div>

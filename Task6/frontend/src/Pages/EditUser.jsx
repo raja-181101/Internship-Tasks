@@ -1,6 +1,7 @@
 import {useState,useEffect} from "react";
 import {useNavigate,useParams} from "react-router-dom";
 import UserForm from "../Components/UserForm.jsx";
+import {authFetch} from "../utils/api.js";
 
 function EditUser(){
     const {id} = useParams();
@@ -14,17 +15,27 @@ function EditUser(){
     });
     const [loading,setLoading]= useState(true);
     const [error, setError] = useState("");
+    const token = localStorage.getItem("token");
 
 
     useEffect(() =>{
-        fetch(`http://localhost:8081/api/users/${id}`)
+        fetch(`http://localhost:8081/api/users/${id}`,{headers:{"Authorization":`Bearer ${token}`}})
             .then(response => {
-                if(!response.ok){
-                    throw new Error("Couldn't Fetch the user!");
+                if (response.status === 403) {
+                    throw new Error("You are not allowed to edit this user");
+                }
+                if (response.status === 401) {throw new Error("Please login again");
+                }
+                if (!response.ok) {throw new Error("Couldn't fetch the user");
                 }
                 return response.json();
             }).then(data => {
-                setFormData(data);
+                setFormData({ name: data.name,
+                                    email: data.email,
+                                    age: data.age,
+                                    gender: data.gender,
+                                    city: data.city
+                                    });
                 setLoading(false);
         }).catch(error=>{
             console.error(error);
@@ -43,7 +54,7 @@ function EditUser(){
     }
     function handleSubmit(event){
         event.preventDefault();
-        fetch(`http://localhost:8081/api/users/${id}`,{
+        authFetch(`http://localhost:8081/api/users/${id}`,{
             method:"PUT",
             headers:{
                 "Content-Type":"application/json"
@@ -52,13 +63,15 @@ function EditUser(){
                 ...formData,age:Number(formData.age)
             })
         }).then(response=>{
-            if (!response.ok){
-                throw new Error("Couldn't get the User!!");
+            if (response.status === 403) {throw new Error("You are not allowed to update this user");
             }
+            if (!response.ok) {throw new Error("Couldn't update the user");
+            }
+
             return response.json();
         }).then(data=>{
             console.log("User Updated",data)
-            navigate(-1);
+            navigate("/user",{replace:true});
         }).catch(error=>{
             console.error("error creating user",error);
         });

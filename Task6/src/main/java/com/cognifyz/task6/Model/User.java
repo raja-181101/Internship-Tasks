@@ -1,9 +1,18 @@
-package com.cognifyz.task5.Model;
+package com.cognifyz.task6.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@Entity
+@Table(name = "users")
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull(message = "Age is Required")
@@ -27,16 +36,12 @@ public class User {
     @NotBlank(message = "City is required")
     private String city;
 
-    public User() {
-    }
+    @JsonIgnore
+    @NotBlank(message = "Password is Required")
+    @Size(min = 8, message = "Password must be At Least 8 Characters")
+    private String password;
 
-    public User(Long id, Integer age, String name, String email, String gender, String city) {
-        this.id = id;
-        this.age = age;
-        this.name = name;
-        this.email = email;
-        this.gender = gender;
-        this.city = city;
-    }
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.USER;
 }

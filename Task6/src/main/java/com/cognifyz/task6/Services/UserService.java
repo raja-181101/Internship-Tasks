@@ -1,6 +1,10 @@
-package com.cognifyz.task5.Services;
+package com.cognifyz.task6.Services;
 
-import com.cognifyz.task5.Model.User;
+import com.cognifyz.task6.DTO.UpdateUserRequest;
+import com.cognifyz.task6.Model.Role;
+import com.cognifyz.task6.Model.User;
+import com.cognifyz.task6.Repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,27 +12,46 @@ import java.util.List;
 
 @Service
 public class UserService {
-    private List<User> Users = new ArrayList<>();
-    private long nextId = 1;
+
+    private final UserRepository repo;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public User login(String email, String password){
+        User user = repo.findByEmail(email).orElse(null);
+        System.out.println("username: "+email);
+        if (user==null){
+            return null;
+        }
+        boolean passwordMatches = passwordEncoder.matches(password, user.getPassword());
+        if (!passwordMatches){
+            return null;
+        }
+        return user;
+
+    }
+
+    public UserService(UserRepository repo, BCryptPasswordEncoder passwordEncoder) {
+        this.repo = repo;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public List<User> getAllUsers(){
-        return Users;
+        return repo.findAll();
     }
 
     public User getUserById(Long id){
-        return Users.stream()
-                .filter(user -> user.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return repo.findById(id).orElse(null);
     }
 
     public User createUser(User user){
-        user.setId(nextId++);
-        Users.add(user);
-        return user;
+        user.setId(null);
+        user.setRole(Role.USER);
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
+        return repo.save(user);
     }
-    public User updateUser(Long id, User updatedUser){
-        User existingUser = getUserById(id);
+    public User updateUser(Long id, UpdateUserRequest updatedUser){
+        User existingUser = repo.findById(id).orElse(null);
         if(existingUser == null){
             return null;
         }
@@ -37,10 +60,14 @@ public class UserService {
         existingUser.setEmail(updatedUser.getEmail());
         existingUser.setCity(updatedUser.getCity());
         existingUser.setGender(updatedUser.getGender());
-        return existingUser;
+        return repo.save(existingUser);
     }
 
     public boolean deleteUser(Long id){
-        return Users.removeIf(User -> User.getId().equals(id));
+        if (!repo.existsById(id)){
+            return false;
+        }
+        repo.deleteById(id);
+        return true;
     }
 }

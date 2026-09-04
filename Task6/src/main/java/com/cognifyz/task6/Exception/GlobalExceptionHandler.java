@@ -1,4 +1,4 @@
-package com.cognifyz.task5.Exception;
+package com.cognifyz.task6.Exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -7,7 +7,7 @@ function TaskSection(){
                 <div className="row allign-items-center">
                     <div className="col-lg-7 task-content">
                         <span className="task-label">Level 3 - Advanced</span>
-                        <h1>Task 5</h1>
+                        <h1>Task 6</h1>
                         <h2>
                             API Integration & <span>{" "} Front-End Interaction</span>
                         </h2>
@@ -17,8 +17,8 @@ function TaskSection(){
                             The application supports CRUD operations
                             and displays data received from the server.
                         </p>
-                        <Link to="/register" className="custom-button">
-                            Register User
+                        <Link to="/about" className="custom-button">
+                            About Project
                         </Link>
                     </div>
                     <div className="col-lg-5">
