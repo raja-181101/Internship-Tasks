@@ -2,6 +2,7 @@ import { useState } from "react";
 import {Link, replace, useNavigate} from "react-router-dom";
 function Login() {
     const navigate = useNavigate();
+    const [showPassword,setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -36,6 +37,7 @@ function Login() {
             localStorage.setItem("role", data.role);
             localStorage.setItem("userId", data.id);
             localStorage.setItem("name", data.name);
+            window.dispatchEvent(new Event("authChange"));
             navigate("/user",{replace:true});
         } catch (error) {
             console.error(error);
@@ -66,13 +68,19 @@ function Login() {
                         </div>
                         <div className="form-group">
                             <label>Password</label>
+                            <div className={"password-box"}>
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
                                 placeholder="Enter your password"
                             />
+                            <i className={showPassword ? "bi bi-eye-slash eye-icon" : "bi bi-eye eye-icon"}
+                               onClick={()=>
+                                   setShowPassword(!showPassword)
+                               }/>
+                            </div>
                         </div>
                         {error && (
                             <p className="login-error">{error}</p>

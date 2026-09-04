@@ -18,4 +18,5 @@ export function logout() {
     localStorage.removeItem("role");
     localStorage.removeItem("userId");
     localStorage.removeItem("name");
+    window.dispatchEvent(new Event("authChange"));
 }

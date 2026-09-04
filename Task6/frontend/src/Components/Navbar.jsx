@@ -1,8 +1,19 @@
 import {Link} from "react-router-dom";
 import {isLoggedIn} from "../utils/auth.js";
+import {useEffect, useState} from "react";
 
 function Navbar(){
-    const loggedIn = isLoggedIn();
+    const [loggedIn, setLoggedIn] = useState(isLoggedIn());
+    useEffect(() => {
+        function handleAuthChange() {
+            setLoggedIn(isLoggedIn());
+        }
+        window.addEventListener("authChange", handleAuthChange);
+        return () => {
+            window.removeEventListener("authChange", handleAuthChange);
+        };
+
+    }, []);
     return(
         <nav className="custom-navbar">
             <div className="container">

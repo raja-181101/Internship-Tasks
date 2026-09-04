@@ -9,13 +9,12 @@ function TaskSection(){
                         <span className="task-label">Level 3 - Advanced</span>
                         <h1>Task 6</h1>
                         <h2>
-                            API Integration & <span>{" "} Front-End Interaction</span>
+                            Database Integration &{" "}<span>Secure Authentication</span>
                         </h2>
                         <p>
-                            In this task, we connect a React
-                            front end with our Spring Boot REST API.
-                            The application supports CRUD operations
-                            and displays data received from the server.
+                            In this task, we extended our React and Spring Boot application
+                            with PostgreSQL database integration, secure password storage,
+                            JWT authentication and role-based authorization.
                         </p>
                         <Link to="/about" className="custom-button">
                             About Project
@@ -28,23 +27,23 @@ function TaskSection(){
                             </h3>
                             <div className="task-item">
                                 <span>01</span>
-                                <p>Create REST API endpoints</p>
+                                <p>Integrate PostgreSQL Database</p>
                             </div>
                             <div className="task-item">
                                 <span>02</span>
-                                <p>Connect React with Spring Boot</p>
+                                <p>Store User Data Securely</p>
                             </div>
                             <div className="task-item">
                                 <span>03</span>
-                                <p>Perform CRUD operations</p>
+                                <p>Implement Login & JWT Authentication</p>
                             </div>
                             <div className="task-item">
                                 <span>04</span>
-                                <p>Fetch and display API data</p>
+                                <p>Add Role-Based Authorization</p>
                             </div>
                             <div className="task-item">
                                 <span>05</span>
-                                <p>Use React Router for navigation</p>
+                                <p>Protect User & Admin Operations</p>
                             </div>
                         </div>
                     </div>

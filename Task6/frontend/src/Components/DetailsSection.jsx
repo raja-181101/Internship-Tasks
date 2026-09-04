@@ -6,47 +6,47 @@ function DetailsSection() {
             <div className="container">
                 <div className="section-heading text-center">
                     <span className="section-label">
-                        FORM INFORMATION
+                        USER INFORMATION
                     </span>
-                    <h2>Registration Details</h2>
-                    <p>These are the details collected through the registration form.</p>
+                    <h2>Account Information</h2>
+                    <p>The following information is collected and securely managed by the application.</p>
                 </div>
 
                 <div className="row g-4">
                     <DetailCard
                         icon="👤"
                         title="Name"
-                        text="Stores the user's full name."
+                        text="Stores the user's full name for account identification."
                     />
 
                     <DetailCard
                         icon="✉"
                         title="Email"
-                        text="Stores the user's email address."
+                        text="Used as the unique account identifier and login credential."
                     />
 
                     <DetailCard
                         icon="🎂"
                         title="Age"
-                        text="Stores the user's age."
+                        text="Stores the user's validated age information."
                     />
 
                     <DetailCard
                         icon="⚥"
                         title="Gender"
-                        text="Stores the selected gender."
+                        text="Stores the gender selected during registration."
                     />
 
                     <DetailCard
                         icon="🌆"
                         title="City"
-                        text="Stores the selected city."
+                        text="Stores the user's selected city."
                     />
-                    
+
                     <DetailCard
                         icon="🔐"
                         title="Password"
-                        text="Passwords are validated and securely stored using BCrypt hashing."
+                        text="Validated for strength and securely stored using BCrypt hashing."
                     />
                 </div>
                 <div className="text-center mt-5">

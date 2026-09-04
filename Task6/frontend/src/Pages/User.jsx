@@ -12,8 +12,6 @@ function User(){
    const navigate = useNavigate();
 
    useEffect(()=>{
-       const token = localStorage.getItem("token");
-       const role = localStorage.getItem("role");
        const userId = localStorage.getItem("userId");
        if (role === "ADMIN") {
            authFetch("http://localhost:8081/api/users")
@@ -121,7 +119,7 @@ function User(){
                        <p>There are currently No Users available</p>
 
                    </div>
-               ):(<div className="users-columns">
+               ):(<div className={`users-columns ${role === "USER" ? "single-user" : ""}`}>
                        {columns.map((column, columnIndex) => (
                            <div className="users-column" key={columnIndex}>
                                {column.map((user) => (
