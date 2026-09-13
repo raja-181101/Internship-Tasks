@@ -21,4 +21,14 @@ public class GlobalExceptionHandler {
                 });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(GithubApiException.class)
+    public ResponseEntity<Map<String,Object>> handleGithubApiException(GithubApiException exception){
+        Map<String,Object> errors = new HashMap<>();
+        errors.put("message",exception.getMessage());
+        errors.put("status",exception.getStatusCode());
+        errors.put("source","GitHub Api");
+
+        return ResponseEntity.status(exception.getStatusCode()).body(errors);
+    }
 }

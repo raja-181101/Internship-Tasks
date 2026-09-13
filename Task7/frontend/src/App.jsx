@@ -10,8 +10,10 @@ import aboutProject from "./Components/AboutProject.jsx";
 import "./App.css"
 import Login from "./Pages/Login.jsx";
 import AboutProject from "./Components/AboutProject.jsx";
-import profile from "./Pages/Profile.jsx";
 import Profile from "./Pages/Profile.jsx";
+import CompleteProfile from "./Pages/CompleteProfile.jsx";
+import OAuthSuccess from "./Pages/OAuthSuccess.jsx";
+import GithubDashboard from "./Pages/GithubDashboard.jsx";
 
 function App(){
   return (
@@ -26,6 +28,9 @@ function App(){
               <Route path={"/about"} element={<ProtectedRoute><AboutProject /></ProtectedRoute>}/>
               <Route path={"/profile"} element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
               <Route path="/login" element={<Login />}/>
+              <Route path="/oauth-success" element={<OAuthSuccess />}/>
+              <Route path="/complete-profile" element={<CompleteProfile />}/>
+              <Route path="/github" element={<ProtectedRoute><GithubDashboard /></ProtectedRoute>}/>
           </Routes>
       </BrowserRouter>
   );

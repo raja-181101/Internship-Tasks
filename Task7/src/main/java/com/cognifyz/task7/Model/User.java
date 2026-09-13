@@ -36,12 +36,16 @@ public class User {
     @NotBlank(message = "City is required")
     private String city;
 
+    @Column(nullable = true)
     @JsonIgnore
-    @NotBlank(message = "Password is Required")
-    @Size(min = 8, message = "Password must be At Least 8 Characters")
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role = Role.USER;
+
+    @Column(unique = true)
+    private Long githubId;
+
+    private String githubUsername;
 }

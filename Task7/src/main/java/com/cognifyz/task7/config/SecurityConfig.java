@@ -31,12 +31,12 @@
                 .csrf(csrf-> csrf.disable())
                     .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                     .authorizeHttpRequests(auth-> auth
-                            .requestMatchers("/api/auth/**").permitAll()
-                            .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
-                            .requestMatchers(HttpMethod.GET,"/api/users").hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasAnyRole("USER","ADMIN")
-                            .requestMatchers(HttpMethod.GET,"/api/users/**").hasAnyRole("USER","ADMIN")
-                            .requestMatchers(HttpMethod.PUT,"/api/users/**").hasAnyRole("USER","ADMIN")
+                            .requestMatchers("/api/auth/**", "/api/oauth/**", "/oauth2/**", "/login/oauth2/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
+                            .requestMatchers(HttpMethod.PUT, "/api/users/**").hasAnyRole("USER", "ADMIN")
+                            .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasAnyRole("USER", "ADMIN")
                             .anyRequest().authenticated())
                     .oauth2Login(oauth->oauth.successHandler(oAuth2LoginSuccessHandler))
                     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -49,6 +49,7 @@
             configuration.setAllowedOrigins(List.of("http://localhost:5173"));
             configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
             configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
+            configuration.setAllowCredentials(true);
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
             source.registerCorsConfiguration("/**",configuration);
             return source;

@@ -41,6 +41,23 @@ function Profile() {
         return null;
     }
 
+    function connectGithub() {
+        const token = localStorage.getItem("token");
+        fetch("http://localhost:8081/api/github/connect",
+            {method: "POST", credentials: "include", headers: {Authorization: `Bearer ${token}`}})
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Unable to connect GitHub");
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("OAuth URL:", data.authorizationUrl);
+                window.location.href = data.authorizationUrl;})
+            .catch(error => {
+                console.error("GitHub connection error:", error);});
+    }
+
 
     return (
         <section className="users-page">
@@ -77,14 +94,18 @@ function Profile() {
                         </div>
 
                         <div className="user-actions">
-                            <Link to={`/user/${user.id}/edit`} className="edit-button">
-                                Edit
-                            </Link>
-                            <button onClick={handleLogout} className="logout-button">
-                                Logout
-                            </button>
-                        </div>
 
+                            <div className="user-action-row">
+                                <Link to={`/user/${user.id}/edit`} className="edit-button">
+                                    Edit
+                                </Link>
+                                <button onClick={handleLogout} className="logout-button">
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                        <button className="github-dashboard-button" onClick={connectGithub}>Connect GitHub</button>
+                        <Link to="/github" className="github-dashboard-button c">GitHub Dashboard</Link>
                     </div>
 
                 </div>
