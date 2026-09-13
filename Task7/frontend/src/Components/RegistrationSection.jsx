@@ -5,20 +5,21 @@ function RegistrationSection() {
         <section id="registration" className="page-section registration-section">
             <div className="container">
                 <div className="section-heading text-center">
-                    <span className="section-label">REGISTRATION</span>
-                    <h2>How Registration Works</h2>
+                    <span className="section-label">GITHUB INTEGRATION</span>
+                    <h2>How GitHub Integration Works</h2>
                     <p>
-                        React validates the user information and sends it to the
-                        Spring Boot REST API, where the password is secured and
-                        the account is permanently stored in PostgreSQL.
+                        The application uses GitHub OAuth for secure
+                        authorization and integrates with the GitHub REST API
+                        to retrieve the authenticated user's profile and
+                        repository information.
                     </p>
                 </div>
                 <div className="process-card">
                     <div className="process-step">
                         <div className="step-number">01</div>
                         <div>
-                            <h4>Fill Registration Form</h4>
-                            <p> The user enters their personal details and creates a secure password.</p>
+                            <h4>Connect with GitHub</h4>
+                            <p> The user chooses GitHub authentication or connects a GitHub account from their profile.</p>
                         </div>
                     </div>
                     <div className="process-line"></div>
@@ -26,8 +27,9 @@ function RegistrationSection() {
                     <div className="process-step">
                         <div className="step-number">02</div>
                         <div>
-                            <h4>React Validates the Data</h4>
-                            <p>The form validates the required fields, email format and password requirements.</p>
+                            <h4>GitHub OAuth Authorization</h4>
+                            <p>Spring Security redirects the user to GitHub,
+                                where they securely authorize the application.</p>
                         </div>
                     </div>
                     <div className="process-line"></div>
@@ -35,8 +37,10 @@ function RegistrationSection() {
                     <div className="process-step">
                         <div className="step-number">03</div>
                         <div>
-                            <h4>REST API Receives the Request</h4>
-                            <p>React sends the registration data as JSON to the Spring Boot REST API.</p>
+                            <h4>OAuth Callback Is Processed</h4>
+                            <p>GitHub redirects the user back to Spring Boot,
+                                where the OAuth response is processed and the
+                                authenticated GitHub account is identified.</p>
                         </div>
 
                     </div>
@@ -45,8 +49,10 @@ function RegistrationSection() {
                     <div className="process-step">
                         <div className="step-number">04</div>
                         <div>
-                            <h4>Password Is Secured</h4>
-                            <p>Spring Boot hashes the password using BCrypt before storing the account.</p>
+                            <h4>GitHub REST API Is Called</h4>
+                            <p>The backend uses the authorized GitHub access
+                                token to securely request profile and repository
+                                information from the GitHub REST API.</p>
                         </div>
 
                     </div>
@@ -55,15 +61,17 @@ function RegistrationSection() {
                     <div className="process-step">
                         <div className="step-number">05</div>
                         <div>
-                            <h4>User Is Stored in PostgreSQL</h4>
-                            <p>The validated user information and hashed password are permanently stored in the PostgreSQL database.</p>
+                            <h4>Developer Dashboard Is Displayed</h4>
+                            <p>React receives the GitHub data from Spring Boot
+                                and displays the user's profile, repositories,
+                                languages, stars, forks and other information.</p>
                         </div>
 
                     </div>
 
                     <div className="registration-action">
                         <Link to="/about" className="custom-button">
-                            About Project
+                            Explore Task 7
                         </Link>
                     </div>
 

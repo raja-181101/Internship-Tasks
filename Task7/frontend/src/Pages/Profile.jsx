@@ -6,6 +6,8 @@ function Profile() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [githubLoading, setGithubLoading] = useState(false);
+    const [githubError, setGithubError] = useState("");
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
 
@@ -38,10 +40,15 @@ function Profile() {
     }
 
     if (!user) {
-        return null;
+        return (
+            <section className="users-page">
+                <p className="users-status">Unable to load profile.</p>
+            </section>);
     }
 
     function connectGithub() {
+        setGithubLoading(true);
+        setGithubError("");
         const token = localStorage.getItem("token");
         fetch("http://localhost:8081/api/github/connect",
             {method: "POST", credentials: "include", headers: {Authorization: `Bearer ${token}`}})
@@ -52,10 +59,17 @@ function Profile() {
                 return response.json();
             })
             .then(data => {
-                console.log("OAuth URL:", data.authorizationUrl);
-                window.location.href = data.authorizationUrl;})
+                if (!data.authorizationUrl) {
+                    throw new Error("GitHub authorization URL not received");
+                }
+                window.location.href = data.authorizationUrl;
+            })
             .catch(error => {
-                console.error("GitHub connection error:", error);});
+                console.error("GitHub connection error:", error);
+                setGithubError("Unable to connect GitHub. Please try again.");
+                setGithubLoading(false);
+            });
+
     }
 
 
@@ -65,7 +79,9 @@ function Profile() {
                 <div className="users-heading">
                     <span className="section-label">MY PROFILE</span>
                     <h1>Account Details</h1>
-                    <p>View and manage your account information.</p>
+                    <p>View your account information and manage
+                        connected services.
+                    </p>
                 </div>
 
                 <div className="profile-card-wrapper">
@@ -104,8 +120,40 @@ function Profile() {
                                 </button>
                             </div>
                         </div>
-                        <button className="github-dashboard-button" onClick={connectGithub}>Connect GitHub</button>
-                        <Link to="/github" className="github-dashboard-button c">GitHub Dashboard</Link>
+                        <div className="github-profile-section">
+                            {user.githubId ? (<>
+                                    <div className="github-connected">
+                                        <div className="github-connected-icon">✓</div>
+                                        <div>
+                                            <span>GitHub Connected</span>
+                                            {user.githubUsername && (
+                                                <p>@{user.githubUsername}</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <Link to="/github" className="github-dashboard-button">
+                                        GitHub Dashboard
+                                    </Link>
+                                </>
+                            ) : (<>
+                                    <div className="github-connect-info">
+                                        <h3>Connect GitHub</h3>
+                                        <p>
+                                            Connect your GitHub account to view your developer profile and repositories.
+                                        </p>
+                                    </div>
+                                    <button className="github-dashboard-button" onClick={connectGithub} disabled={githubLoading}>
+                                        {githubLoading
+                                            ? "Connecting..."
+                                            : "Connect GitHub"
+                                        }
+                                    </button>
+                                </>
+                            )}
+                            {githubError && (
+                                <p className="github-connect-error">{githubError}</p>
+                            )}
+                        </div>
                     </div>
 
                 </div>
