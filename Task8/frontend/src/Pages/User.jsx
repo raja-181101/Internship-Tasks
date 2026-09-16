@@ -89,8 +89,12 @@ function User(){
     if (error) {
         return (
             <div className="users-page">
-                <p className="users-status">{error}</p>
-                <button className="custom-button" onClick={moveToLogin}>Login</button>
+                <div className="auth-error">
+                    <p className="users-status">{error}</p>
+                    <button className="custom-button" onClick={moveToLogin}>
+                        Login
+                    </button>
+                </div>
             </div>
         );
     }

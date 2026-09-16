@@ -30,6 +30,7 @@ function Navbar(){
                             <Link to="/profile">Profile</Link>
                         )}
                         <Link to="/about">About Project</Link>
+                        <Link to="/task8">Task 8 Dashboard</Link>
                     </div>
                 </div>
             </div>

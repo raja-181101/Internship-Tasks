@@ -4,6 +4,9 @@ import com.cognifyz.task8.DTO.UpdateUserRequest;
 import com.cognifyz.task8.Model.Role;
 import com.cognifyz.task8.Model.User;
 import com.cognifyz.task8.Repository.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +42,9 @@ public class UserService {
         return repo.findAll();
     }
 
+    @Cacheable(value = "users",key = "#id")
     public User getUserById(Long id){
+        System.out.println("Fetching Users from Postgres: "+id);
         return repo.findById(id).orElse(null);
     }
 
@@ -50,7 +55,9 @@ public class UserService {
         user.setPassword(hashedPassword);
         return repo.save(user);
     }
+    @CachePut(value = "users",key = "#id")
     public User updateUser(Long id, UpdateUserRequest updatedUser){
+        System.out.println("Updating Users from Postgres: "+id);
         User existingUser = repo.findById(id).orElse(null);
         if(existingUser == null){
             return null;
@@ -63,6 +70,7 @@ public class UserService {
         return repo.save(existingUser);
     }
 
+    @CacheEvict(value = "users",key = "#id")
     public boolean deleteUser(Long id){
         if (!repo.existsById(id)){
             return false;

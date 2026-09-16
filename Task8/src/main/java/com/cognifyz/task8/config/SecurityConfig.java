@@ -37,6 +37,8 @@
                             .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
                             .requestMatchers(HttpMethod.PUT, "/api/users/**").hasAnyRole("USER", "ADMIN")
                             .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasAnyRole("USER", "ADMIN")
+                            .requestMatchers("/api/jobs/**").hasAnyRole("USER", "ADMIN")
+                            .requestMatchers("/api/cache/**").hasAnyRole("USER", "ADMIN")
                             .anyRequest().authenticated())
                     .oauth2Login(oauth->oauth.successHandler(oAuth2LoginSuccessHandler))
                     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -49,6 +51,7 @@
             configuration.setAllowedOrigins(List.of("http://localhost:5173"));
             configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
             configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
+            configuration.setExposedHeaders(List.of("X-Request-ID"));
             configuration.setAllowCredentials(true);
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
             source.registerCorsConfiguration("/**",configuration);

@@ -30,6 +30,9 @@ function Profile() {
         logout();
         navigate("/", {replace: true});
     }
+    function moveToLogin(){
+        navigate("/login",{replace:true});
+    }
 
     if (loading) {
         return (
@@ -41,9 +44,14 @@ function Profile() {
 
     if (!user) {
         return (
-            <section className="users-page">
-                <p className="users-status">Unable to load profile.</p>
-            </section>);
+            <div className="users-page">
+                <div className="auth-error">
+                    <p className="users-status">Unable to Load Profile</p>
+                    <button className="custom-button" onClick={moveToLogin}>
+                        Login
+                    </button>
+                </div>
+            </div>);
     }
 
     function connectGithub() {

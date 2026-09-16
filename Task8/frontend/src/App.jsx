@@ -14,6 +14,7 @@ import Profile from "./Pages/Profile.jsx";
 import CompleteProfile from "./Pages/CompleteProfile.jsx";
 import OAuthSuccess from "./Pages/OAuthSuccess.jsx";
 import GithubDashboard from "./Pages/GithubDashboard.jsx";
+import Task8Dashboard from "./Pages/Task8Dashboard.jsx";
 
 function App(){
   return (
@@ -31,6 +32,7 @@ function App(){
               <Route path="/oauth-success" element={<OAuthSuccess />}/>
               <Route path="/complete-profile" element={<CompleteProfile />}/>
               <Route path="/github" element={<ProtectedRoute><GithubDashboard /></ProtectedRoute>}/>
+              <Route path="/task8" element={<Task8Dashboard />}/>
           </Routes>
       </BrowserRouter>
   );
