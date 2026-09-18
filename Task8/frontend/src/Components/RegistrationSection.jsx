@@ -5,21 +5,24 @@ function RegistrationSection() {
         <section id="registration" className="page-section registration-section">
             <div className="container">
                 <div className="section-heading text-center">
-                    <span className="section-label">GITHUB INTEGRATION</span>
-                    <h2>How GitHub Integration Works</h2>
+                    <span className="section-label">ADVANCED SERVER-SIDE FUNCTIONALITY</span>
+                    <h2>How Task 8 Works</h2>
                     <p>
-                        The application uses GitHub OAuth for secure
-                        authorization and integrates with the GitHub REST API
-                        to retrieve the authenticated user's profile and
-                        repository information.
+                        The application uses Spring Boot and Redis
+                        to implement request-processing middleware,
+                        background job processing, and server-side
+                        caching for a more robust backend architecture.
                     </p>
                 </div>
                 <div className="process-card">
                     <div className="process-step">
                         <div className="step-number">01</div>
                         <div>
-                            <h4>Connect with GitHub</h4>
-                            <p> The user chooses GitHub authentication or connects a GitHub account from their profile.</p>
+                            <h4>Client Sends a Request</h4>
+                            <p>The React frontend sends authenticated
+                                HTTP requests to the Spring Boot backend
+                                for application data and Task 8
+                                operations.</p>
                         </div>
                     </div>
                     <div className="process-line"></div>
@@ -27,9 +30,12 @@ function RegistrationSection() {
                     <div className="process-step">
                         <div className="step-number">02</div>
                         <div>
-                            <h4>GitHub OAuth Authorization</h4>
-                            <p>Spring Security redirects the user to GitHub,
-                                where they securely authorize the application.</p>
+                            <h4>Request Middleware Processes It</h4>
+                            <p>The request logging middleware intercepts
+                                incoming requests and records information
+                                such as the HTTP method, request URI,
+                                response status, request ID, and
+                                processing time.</p>
                         </div>
                     </div>
                     <div className="process-line"></div>
@@ -37,10 +43,12 @@ function RegistrationSection() {
                     <div className="process-step">
                         <div className="step-number">03</div>
                         <div>
-                            <h4>OAuth Callback Is Processed</h4>
-                            <p>GitHub redirects the user back to Spring Boot,
-                                where the OAuth response is processed and the
-                                authenticated GitHub account is identified.</p>
+                            <h4>Background Jobs Are Queued</h4>
+                            <p>Background timer jobs are added to a
+                                Redis-backed queue. The worker processes
+                                queued jobs independently while their
+                                status and remaining time are stored
+                                in Redis</p>
                         </div>
 
                     </div>
@@ -49,10 +57,11 @@ function RegistrationSection() {
                     <div className="process-step">
                         <div className="step-number">04</div>
                         <div>
-                            <h4>GitHub REST API Is Called</h4>
-                            <p>The backend uses the authorized GitHub access
-                                token to securely request profile and repository
-                                information from the GitHub REST API.</p>
+                            <h4>Application Data Is Cached</h4>
+                            <p> Authenticated user data can be stored
+                                temporarily in Redis, reducing the need
+                                to repeatedly retrieve the same data
+                                from PostgreSQL.</p>
                         </div>
 
                     </div>
@@ -61,17 +70,18 @@ function RegistrationSection() {
                     <div className="process-step">
                         <div className="step-number">05</div>
                         <div>
-                            <h4>Developer Dashboard Is Displayed</h4>
-                            <p>React receives the GitHub data from Spring Boot
-                                and displays the user's profile, repositories,
-                                languages, stars, forks and other information.</p>
+                            <h4>Task 8 Dashboard Displays the Results</h4>
+                            <p>The React dashboard displays background
+                                job progress, queue status, request
+                                monitoring information, and PostgreSQL
+                                versus Redis cache retrieval results.</p>
                         </div>
 
                     </div>
 
                     <div className="registration-action">
                         <Link to="/about" className="custom-button">
-                            Explore Task 7
+                            Explore Task 8
                         </Link>
                     </div>
 

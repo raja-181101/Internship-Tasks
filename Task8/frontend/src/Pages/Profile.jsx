@@ -1,9 +1,10 @@
 import {useEffect, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link,useLocation,useNavigate} from "react-router-dom";
 import {logout} from "../utils/auth.js";
 
 function Profile() {
     const navigate = useNavigate();
+    const Location = useLocation();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [githubLoading, setGithubLoading] = useState(false);
@@ -26,6 +27,25 @@ function Profile() {
                 setLoading(false);
             });
     }, [token, userId]);
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const githubStatus = params.get("github");
+        if (githubStatus === "email-mismatch") {
+            setGithubError(
+                "The GitHub account currently signed in does not match " +
+                "your application email. Please sign in with the matching GitHub account."
+            );
+            setGithubLoading(false);
+        }
+        if (githubStatus === "already-linked") {
+            setGithubError(
+                "This GitHub account is already connected to another application account."
+            );
+            setGithubLoading(false);
+        }
+    }, [location.search]);
+
     function handleLogout() {
         logout();
         navigate("/", {replace: true});
@@ -78,6 +98,10 @@ function Profile() {
                 setGithubLoading(false);
             });
 
+    }
+
+    function switchGithubAccount() {
+        window.location.href = "https://github.com/logout";
     }
 
 
@@ -159,7 +183,16 @@ function Profile() {
                                 </>
                             )}
                             {githubError && (
-                                <p className="github-connect-error">{githubError}</p>
+                                <div className="github-connect-error">
+                                    <p>{githubError}</p>
+                                    {new URLSearchParams(location.search).get("github") === "email-mismatch" && (
+                                        <button className="github-dashboard-button" onClick={switchGithubAccount}>
+                                            Sign in with Another GitHub Account
+                                        </button>
+
+                                    )}
+
+                                </div>
                             )}
                         </div>
                     </div>

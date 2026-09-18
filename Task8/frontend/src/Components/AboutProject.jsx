@@ -7,18 +7,20 @@ function AboutProject() {
                     <div className="about-hero-card">
 
                         <span className="section-label">
-                            TASK 7
+                            TASK 8
                         </span>
 
                         <h1>
-                            Advanced API Usage & External API Integration
+                            Advanced Server-Side Functionality
                         </h1>
 
                         <p>
-                            Task 7 extends the secure React and Spring Boot
-                            application by introducing GitHub OAuth authentication,
-                            external GitHub REST API integration, account linking,
-                            API rate limiting and advanced error handling.
+                            Task 8 extends the application with advanced
+                            server-side capabilities using Spring Boot and
+                            Redis, including request logging middleware,
+                            background job processing, Redis-based job
+                            queuing, server-side caching and application
+                            monitoring.
                         </p>
 
                     </div>
@@ -44,38 +46,38 @@ function AboutProject() {
 
                         <AboutCard
                             number="01"
-                            title="GitHub OAuth"
-                            text="Users can authenticate securely through GitHub using OAuth without sharing their GitHub password with the application."
+                            title="Request Logging Middleware"
+                            text="A custom Spring Boot request filter intercepts incoming HTTP requests and records the request method, URI, response status, unique request ID and processing time."
                         />
 
                         <AboutCard
                             number="02"
-                            title="Account Linking"
-                            text="Existing users who registered with email and password can connect a GitHub account to their existing application profile."
+                            title="Background Job Processing"
+                            text="Background timer jobs are processed independently from normal HTTP request handling using a scheduled server-side worker."
                         />
 
                         <AboutCard
                             number="03"
-                            title="GitHub REST API"
-                            text="The Spring Boot backend communicates with the GitHub REST API using the authorized GitHub access token."
+                            title="Redis Job Queue"
+                            text="Redis stores queued background jobs and their current state, allowing jobs to move through queued, processing and completed stages."
                         />
 
                         <AboutCard
                             number="04"
-                            title="Developer Dashboard"
-                            text="GitHub profile information and repositories are retrieved from the external API and displayed in a React developer dashboard."
+                            title="Server-Side Caching"
+                            text="Redis is used as a server-side cache for user data, reducing repeated access to the PostgreSQL database for cached information."
                         />
 
                         <AboutCard
                             number="05"
-                            title="API Rate Limiting"
-                            text="Repeated requests to the GitHub integration are controlled using rate limiting to protect the API from excessive usage."
+                            title="Cache Comparison"
+                            text="Authenticated users can retrieve selected profile information from PostgreSQL and Redis while viewing the backend response time for each source."
                         />
 
                         <AboutCard
                             number="06"
-                            title="Advanced Error Handling"
-                            text="The application handles authentication failures, GitHub API errors, rate-limit responses and external service failures."
+                            title="Task 8 Dashboard"
+                            text="The React dashboard provides a visual interface for creating background jobs, monitoring the queue, viewing request information and testing Redis caching."
                         />
 
                     </div>
@@ -94,7 +96,7 @@ function AboutProject() {
                         </span>
 
                         <h2>
-                            What Changed From Task 6?
+                            What Changed From Task 7?
                         </h2>
 
                     </div>
@@ -105,27 +107,31 @@ function AboutProject() {
                         <div className="upgrade-card">
 
                             <span className="upgrade-task">
-                                TASK 6
+                                TASK 7
                             </span>
 
                             <h3>
-                                Secure Database Application
+                                Advanced API Integration
                             </h3>
 
                             <p>
-                                PostgreSQL permanently stores user information.
+                                GitHub OAuth provides secure external
+                                authentication.
                             </p>
 
                             <p>
-                                BCrypt protects local account passwords.
+                                Existing users can link their GitHub
+                                accounts.
                             </p>
 
                             <p>
-                                JWT authenticates protected REST API requests.
+                                GitHub REST API provides developer profile
+                                and repository information.
                             </p>
 
                             <p>
-                                USER and ADMIN roles control authorization.
+                                Rate limiting and error handling protect
+                                external API operations.
                             </p>
 
                         </div>
@@ -139,29 +145,31 @@ function AboutProject() {
                         <div className="upgrade-card highlighted">
 
                             <span className="upgrade-task">
-                                TASK 7
+                                TASK 8
                             </span>
 
                             <h3>
-                                Advanced External API Integration
+                                Advanced Server-Side Functionality
                             </h3>
 
                             <p>
-                                GitHub OAuth provides external authentication.
+                                Request middleware logs and monitors
+                                HTTP request processing.
                             </p>
 
                             <p>
-                                Existing users can link their GitHub accounts.
+                                Redis provides background job queuing
+                                and job status storage.
                             </p>
 
                             <p>
-                                GitHub REST API supplies developer profile
-                                and repository information.
+                                A scheduled worker processes queued
+                                jobs asynchronously.
                             </p>
 
                             <p>
-                                Rate limiting and advanced error handling
-                                protect external API operations.
+                                Redis server-side caching reduces
+                                repeated database access.
                             </p>
 
                         </div>
@@ -178,7 +186,7 @@ function AboutProject() {
                     <div className="about-section-heading">
 
                         <span className="section-label">
-                            GITHUB INTEGRATION FLOW
+                            SERVER-SIDE PROCESSING FLOW
                         </span>
 
                         <h2>
@@ -192,38 +200,38 @@ function AboutProject() {
 
                         <FlowStep
                             number="01"
-                            title="Connect GitHub"
-                            text="The user signs in with GitHub or connects GitHub from an existing profile."
+                            title="Client Request"
+                            text="The React frontend sends authenticated HTTP requests to the Spring Boot backend."
                         />
 
                         <FlowStep
                             number="02"
-                            title="OAuth Authorization"
-                            text="Spring Security redirects the user to GitHub for secure authorization."
+                            title="Request Middleware"
+                            text="The request logging middleware intercepts requests and records request and response information."
                         />
 
                         <FlowStep
                             number="03"
-                            title="OAuth Callback"
-                            text="GitHub redirects the authenticated user back to the Spring Boot application."
+                            title="Backend Processing"
+                            text="Spring Boot processes the request and communicates with PostgreSQL or Redis depending on the requested operation."
                         />
 
                         <FlowStep
                             number="04"
-                            title="Access Token"
-                            text="The backend receives GitHub authorization and securely manages the GitHub access token."
+                            title="Redis Cache"
+                            text="Frequently accessed user information can be stored and retrieved from Redis instead of repeatedly querying PostgreSQL."
                         />
 
                         <FlowStep
                             number="05"
-                            title="GitHub REST API"
-                            text="The backend requests profile and repository information from GitHub."
+                            title="Background Worker"
+                            text="Timer jobs are stored in the Redis queue and processed independently by the scheduled background worker."
                         />
 
                         <FlowStep
                             number="06"
-                            title="Developer Dashboard"
-                            text="React displays the GitHub profile and repository information returned by the backend."
+                            title="Monitoring Dashboard"
+                            text="React displays job progress, queue status, request information and database-versus-cache results in the Task 8 dashboard."
                         />
 
                     </div>

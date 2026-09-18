@@ -4,15 +4,18 @@ function TaskSection(){
     return(
         <section id="home" className= "page-section task-section">
             <div className="container">
-                <div className="row allign-items-center">
+                <div className="row align-items-center">
                     <div className="col-lg-7 task-content">
                         <span className="task-label">Level 4 - Expert</span>
-                        <h1>Task 7</h1>
+                        <h1>Task 8</h1>
                         <h2>
-                            Advanced API Usage &{" "}<span>External API Integration</span>
+                            Advanced <span>Server-Side Functionality</span>
                         </h2>
                         <p>
-                            In this task, we extended our React and Spring Boot application with GitHub OAuth authentication, external GitHub REST API integration, API rate limiting and advanced error handling.
+                            Implement advanced backend capabilities using Spring Boot
+                            and Redis, including request-processing middleware,
+                            asynchronous background job processing, and server-side
+                            caching for improved application performance and scalability.
                         </p>
                         <Link to="/about" className="custom-button">
                             About Project
@@ -25,23 +28,15 @@ function TaskSection(){
                             </h3>
                             <div className="task-item">
                                 <span>01</span>
-                                <p>Implement GitHub OAuth Authentication</p>
+                                <p>Implement Request Logging Middleware</p>
                             </div>
                             <div className="task-item">
                                 <span>02</span>
-                                <p>Integrate the GitHub REST API</p>
+                                <p>Implement Redis Background Job Processing</p>
                             </div>
                             <div className="task-item">
                                 <span>03</span>
-                                <p>Build a GitHub Developer Dashboard</p>
-                            </div>
-                            <div className="task-item">
-                                <span>04</span>
-                                <p>Implement API Rate Limiting</p>
-                            </div>
-                            <div className="task-item">
-                                <span>05</span>
-                                <p>Add Advanced API Error Handling</p>
+                                <p>Implement Server-Side Redis Caching</p>
                             </div>
                         </div>
                     </div>

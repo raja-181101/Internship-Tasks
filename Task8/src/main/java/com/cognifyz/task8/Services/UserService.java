@@ -69,6 +69,16 @@ public class UserService {
         existingUser.setGender(updatedUser.getGender());
         return repo.save(existingUser);
     }
+    @CachePut(value = "users", key = "#userId")
+    public User connectGithub(Long userId, Long githubId, String githubUsername) {
+        User user = repo.findById(userId).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        user.setGithubId(githubId);
+        user.setGithubUsername(githubUsername);
+        return repo.save(user);
+    }
 
     @CacheEvict(value = "users",key = "#id")
     public boolean deleteUser(Long id){

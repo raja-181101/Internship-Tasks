@@ -19,7 +19,7 @@ function Navbar(){
             <div className="container">
                 <div className="d-flex justify-content-between align-items-center">
                     <Link to="/" className="navbar-brand">
-                        Task 7
+                        Task 8
                     </Link>
                     <div className="nav-links">
                         <Link to="/">Home</Link>

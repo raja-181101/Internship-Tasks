@@ -3,6 +3,7 @@ package com.cognifyz.task8.Security;
 import com.cognifyz.task8.Model.User;
 import com.cognifyz.task8.Repository.UserRepository;
 import com.cognifyz.task8.Services.JwtServices;
+import com.cognifyz.task8.Services.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,11 +28,13 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     public final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
     UserRepository userRepository;
     JwtServices jwtServices;
+    private final UserService userService;
 
-    public OAuth2LoginSuccessHandler(UserRepository userRepo, JwtServices jwtServices, OAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
+    public OAuth2LoginSuccessHandler(UserRepository userRepo, JwtServices jwtServices, OAuth2AuthorizedClientService oAuth2AuthorizedClientService, UserService userService) {
         this.oAuth2AuthorizedClientService = oAuth2AuthorizedClientService;
         this.userRepository = userRepo;
         this.jwtServices = jwtServices;
+        this.userService = userService;
     }
 
 
@@ -46,11 +49,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         Long githubId = githubIdValue.longValue();
 
         Long githubLinkUserId = (Long) request.getSession().getAttribute("githubLinkUserId");
+        String githubLinkEmail = (String) request.getSession().getAttribute("githubLinkEmail");
 
         OAuth2AuthorizedClient authorizedClient = oAuth2AuthorizedClientService.loadAuthorizedClient("github", authentication.getName());
         String githubAccessToken = authorizedClient.getAccessToken().getTokenValue();
 
-        request.setAttribute("githubAccessToken",githubAccessToken);
+//        request.setAttribute("githubAccessToken",githubAccessToken);
 
         RestClient restClient = RestClient.create();
         List<Map<String,Object>> emails = restClient.get().uri("https://api.github.com/user/emails")
@@ -71,13 +75,41 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         if (githubLinkUserId != null) {
             User user = userRepository.findById(githubLinkUserId).orElse(null);
             if (user == null) {
-                response.sendRedirect("http://localhost:5173/profile");
+                request.getSession().removeAttribute("githubLinkUserId");
+                request.getSession().removeAttribute("githubLinkEmail");
+                response.sendRedirect("http://localhost:5173/profile?github=user-not-found");
                 return;
             }
-            user.setGithubId(githubId);
-            user.setGithubUsername(gitHubName);
-            userRepository.save(user);
+
+            boolean githubEmailMatches = false;
+            if (githubLinkEmail != null && emails != null) {
+                for (Map<String, Object> item : emails) {
+                    String githubEmail = (String) item.get("email");
+                    boolean verified = Boolean.TRUE.equals(item.get("verified"));
+                    if (verified && githubEmail != null && githubLinkEmail.equalsIgnoreCase(githubEmail)) {
+                        githubEmailMatches = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!githubEmailMatches) {
+                request.getSession().removeAttribute("githubAccessToken");
+                request.getSession().removeAttribute("githubLinkUserId");
+                request.getSession().removeAttribute("githubLinkEmail");
+                response.sendRedirect("http://localhost:5173/profile?github=email-mismatch");
+                return;
+            }
+            User githubOwner = userRepository.findByGithubId(githubId).orElse(null);
+            if (githubOwner != null && !githubOwner.getId().equals(user.getId())) {
+                request.getSession().removeAttribute("githubLinkUserId");
+                request.getSession().removeAttribute("githubLinkEmail");
+                response.sendRedirect("http://localhost:5173/profile?github=already-linked");
+                return;
+            }
+            userService.connectGithub(user.getId(),githubId,gitHubName);
             request.getSession().removeAttribute("githubLinkUserId");
+            request.getSession().removeAttribute("githubLinkEmail");
             request.getSession().setAttribute("githubAccessToken", githubAccessToken);
             response.sendRedirect("http://localhost:5173/profile?github=connected");
             return;

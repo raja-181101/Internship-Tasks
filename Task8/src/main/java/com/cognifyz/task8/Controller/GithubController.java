@@ -49,13 +49,18 @@ public class GithubController {
     @GetMapping("/connect")
     public void connectGithub(Authentication authentication, HttpSession session, HttpServletResponse response) throws IOException {
         Long userId = (Long) authentication.getDetails();
+        String userEmail = authentication.getName();
         session.setAttribute("githubLinkUserId", userId);
+        session.setAttribute("githubLinkEmail",userEmail);
         response.sendRedirect("/oauth2/authorization/github");
     }
     @PostMapping("/connect")
     public ResponseEntity<?> connectGithub(Authentication authentication, HttpSession session) {
         Long userId = (Long) authentication.getDetails();
+        String userEmail = authentication.getName();
         session.setAttribute("githubLinkUserId", userId);
+        session.setAttribute("githubLinkEmail", userEmail);
+
         return ResponseEntity.ok(Map.of("authorizationUrl", "http://localhost:8081/oauth2/authorization/github"));
     }
 }
